@@ -1,5 +1,15 @@
 # Compare Local Installation CI/CD Tools
 
+## Requirements (in order of priority)
+- Installation is compatible with RHEL
+  - Prefer robust patching and update cycles, ideally aligned with RHEL patching
+- Actively developed with a large community and plenty of documentation
+- Integrates with current ecosystem
+  - Rich plugin and integration marketplace
+- Easier learning curve
+- Option for enterprise-class premium support
+- Compatible with cloud and/or container ecosystems 
+
 ## CI / CD Tools
 ### Jenkins
 ### GitLab CICD
