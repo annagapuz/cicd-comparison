@@ -26,6 +26,7 @@
 ### RHEL 8
 * https://developers.redhat.com/blog/2020/03/24/red-hat-universal-base-images-for-docker-users/
 * https://www.redhat.com/en/blog/new-year-new-red-hat-enterprise-linux-programs-easier-ways-access-rhel
+* https://catalog.redhat.com/software/containers/ubi8/5c647760bed8bd28d0e38f9f
 ### Windows Server
 * Will exclude from demo
 ### Ansible
