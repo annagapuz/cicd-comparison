@@ -37,6 +37,11 @@
 Satellite intended to be a layer over RPMs in Nexus
 ### Subversion
 * https://subversion.apache.org/packages.html#redhat
+* Repositories:
+  * movie-service
+  * movie-web
+  * movie-scripts
+  * pipeline
 ### Nexus
 https://www.sonatype.com/nexus/free-developer-tools
 * Standard Release and Snapshot repositories
