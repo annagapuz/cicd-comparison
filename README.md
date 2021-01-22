@@ -36,6 +36,7 @@
 * https://github.com/ricardozanini/soccer-stats/blob/master/Jenkinsfile
 Satellite intended to be a layer over RPMs in Nexus
 ### Subversion
+* https://subversion.apache.org/packages.html#redhat
 ### Nexus
 https://www.sonatype.com/nexus/free-developer-tools
 * Standard Release and Snapshot repositories
