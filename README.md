@@ -11,13 +11,16 @@
 * Compatible with cloud and/or container ecosystems
 
 ## CI / CD Tools
-### Jenkins
-### GitLab CICD
-### CircleCI
-### JetBrains TeamCity
-### GoCD
-### Azure DevOps Server
-### Oracle Container Pipelines
+### Selected Tools
+* Jenkins
+* GitLab CICD
+* JetBrains TeamCity
+
+### Removed from Comparison
+* CircleCI
+* GoCD
+* Azure DevOps Server
+* Oracle Container Pipelines
 
 ## Ecosystem
 ### RHEL 8
@@ -37,7 +40,9 @@ https://www.sonatype.com/nexus/free-developer-tools
 * Standard Release and Snapshot repositories
 * YUM repository
 ### JBOSS
-### Apache HTTPD
+### RPM
+* https://linuxconfig.org/how-to-create-an-rpm-package
+* https://rpm-packaging-guide.github.io/
 ### Active Directory
 ### Sybase
 ### MSSQL
