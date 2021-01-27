@@ -8,11 +8,12 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MovieService {
 
-    private MovieRepository movieRepository;
+    private final MovieRepository movieRepository;
 
     @Autowired
     public MovieService(MovieRepository movieRepository) {
@@ -32,5 +33,14 @@ public class MovieService {
         }
         movieRepository.save(new Movie(title));
         return true;
+    }
+
+    public int incrementStreamCountById(long movieId, int incrementCount) {
+        Optional<Movie> movie = movieRepository.findById(movieId);
+        movie.ifPresent(m -> {
+            m.setStreamCount(m.getStreamCount() + incrementCount);
+            movieRepository.save(m);
+        });
+        return movie.map(Movie::getStreamCount).orElse(-1);
     }
 }

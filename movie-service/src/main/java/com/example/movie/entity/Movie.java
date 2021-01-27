@@ -40,4 +40,8 @@ public class Movie {
     public int getStreamCount() {
         return streamCount;
     }
+
+    public void setStreamCount(int streamCount) {
+        this.streamCount = streamCount;
+    }
 }
