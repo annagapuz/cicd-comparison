@@ -43,10 +43,11 @@ Satellite intended to be a layer over RPMs in Nexus
   * movie-scripts
   * pipeline
 ### Nexus
-https://www.sonatype.com/nexus/free-developer-tools
+* https://www.sonatype.com/nexus/free-developer-tools
 * Standard Release and Snapshot repositories
 * YUM repository
 ### JBOSS
+* https://docs.jboss.org/wildfly/plugins/maven/latest/deploy-mojo.html
 ### RPM
 * https://linuxconfig.org/how-to-create-an-rpm-package
 * https://rpm-packaging-guide.github.io/
