@@ -1,21 +1,23 @@
 version: "3.9"
 services:
-#  subversion:
-#    build: ./subversion
-#    ports:
-#    - 9888:80
-#    volumes:
-#      - cicd-vols:/var/www/svn
-#  sap-ase:
-#    image: sap-express:latest
-#    hostname: 127.0.0.1
-#    ports:
-#    - 9500:5000
-    # Can't use a volume. I believe there are permissions that need to be set on the host.
+  subversion:
+    build: ./subversion
+    ports:
+    - 9888:80
+    volumes:
+      - cicd-vols:/var/www/svn
+  sap-ase:
+    image: sap-express:latest
+    hostname: 127.0.0.1
+    ports:
+    - 9500:5000
   jboss-service:
     build: ./jboss-service
     ports:
       - 9800:8080
       - 9900:9990
+  jboss-scripts:
+    build: ./jboss-scripts
+    tty: true
 volumes:
   cicd-vols:
