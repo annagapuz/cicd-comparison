@@ -10,6 +10,12 @@ services:
     image: sonatype/nexus3:3.29.2
     ports:
       - 9081:8081
+  sonarqube:
+    image: sonarqube:8.6.1-community
+    ports:
+      - 9000:9000
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
   sap-ase:
     image: sap-express:latest
     hostname: 127.0.0.1
