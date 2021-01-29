@@ -44,8 +44,7 @@ Satellite intended to be a layer over RPMs in Nexus
   * pipeline
 ### Nexus
 * https://www.sonatype.com/nexus/free-developer-tools
-* Standard Release and Snapshot repositories
-* YUM repository
+* https://hub.docker.com/r/sonatype/nexus3
 ### JBOSS
 * https://docs.jboss.org/wildfly/plugins/maven/latest/deploy-mojo.html
 ### RPM

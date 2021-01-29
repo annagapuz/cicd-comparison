@@ -3,14 +3,18 @@ services:
   subversion:
     build: ./subversion
     ports:
-    - 9888:80
+      - 9080:80
     volumes:
       - cicd-vols:/var/www/svn
+  sonatype:
+    image: sonatype/nexus3:3.29.2
+    ports:
+      - 9081:8081
   sap-ase:
     image: sap-express:latest
     hostname: 127.0.0.1
     ports:
-    - 9500:5000
+      - 9500:5000
   jboss-service:
     build: ./jboss-service
     ports:
