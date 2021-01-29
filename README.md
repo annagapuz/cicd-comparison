@@ -52,10 +52,13 @@ Satellite intended to be a layer over RPMs in Nexus
 * https://rpm-packaging-guide.github.io/
 ### Active Directory
 ### Sybase
+* Will use image previous built - https://github.com/annagapuz/docker-sap-ase-express
 ### MSSQL
 * Will exclude from demo
 ### Veracode
 * Will replace with Sonarqube
+* https://docs.sonarqube.org/latest/setup/get-started-2-minutes/
+* https://hub.docker.com/_/sonarqube/
 ### CAST
 * Will exclude from demo
 
