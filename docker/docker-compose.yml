@@ -5,7 +5,7 @@ services:
     ports:
       - 9080:80
     volumes:
-      - cicd-vols:/var/www/svn
+      - svn-vol:/var/www/svn
   sonatype:
     image: sonatype/nexus3:3.29.2
     ports:
@@ -29,5 +29,13 @@ services:
   jboss-scripts:
     build: ./jboss-scripts
     tty: true
+  jenkins:
+    image: jenkins/jenkins:lts-slim
+    ports:
+      - 9888:8080
+      - 50000:50000
+    volumes:
+      - jenkins-vol:/var/jenkins_home
 volumes:
-  cicd-vols:
+  svn-vol:
+  jenkins-vol:
