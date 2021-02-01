@@ -47,6 +47,7 @@ Satellite intended to be a layer over RPMs in Nexus
 * https://hub.docker.com/r/sonatype/nexus3
 ### JBOSS
 * https://docs.jboss.org/wildfly/plugins/maven/latest/deploy-mojo.html
+* https://hub.docker.com/r/jboss/wildfly
 ### RPM
 * https://linuxconfig.org/how-to-create-an-rpm-package
 * https://rpm-packaging-guide.github.io/
