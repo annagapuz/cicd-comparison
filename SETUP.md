@@ -144,3 +144,6 @@ xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.o
 
 </settings>
 ```
+- TeamCity
+  - http://localhost:8111
+  - Authorize agent

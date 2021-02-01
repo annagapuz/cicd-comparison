@@ -36,6 +36,22 @@ services:
       - 50000:50000
     volumes:
       - jenkins-vol:/var/jenkins_home
+  teamcity:
+    image: jetbrains/teamcity-server:2020.2.2
+    ports:
+      - 8111:8111
+    volumes:
+      - teamcity-vol:/data/teamcity_server/datadir
+      - teamcity-vol:/opt/teamcity/logs
+  teamcity-agent:
+    image: jetbrains/teamcity-agent:2020.2.2
+    environment:
+      - SERVER_URL=http://teamcity:8111
+    volumes:
+      - teamcity-vol:/data/teamcity_agent/conf
+    depends_on:
+      - teamcity
 volumes:
   svn-vol:
   jenkins-vol:
+  teamcity-vol:

@@ -62,6 +62,15 @@ Satellite intended to be a layer over RPMs in Nexus
 * https://hub.docker.com/_/sonarqube/
 ### CAST
 * Will exclude from demo
+### Jenkins
+* https://hub.docker.com/r/jenkins/jenkins
+### TeamCity
+* https://hub.docker.com/r/jetbrains/teamcity-server
+* https://www.jetbrains.com/help/teamcity/predefined-build-parameters.html#Detecting+Java+on+Agent
+### GitLab
+* https://hub.docker.com/r/gitlab/gitlab-ce
+* gitlab/gitlab-ce:13.8.2-ce.0
+* https://docs.gitlab.com/omnibus/docker/
 
 ## Tasks
 * RHEL Docker containers (w/ Compose)
