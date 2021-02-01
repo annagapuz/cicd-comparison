@@ -6,7 +6,7 @@ services:
       - 9080:80
     volumes:
       - svn-vol:/var/www/svn
-  sonatype:
+  nexus:
     image: sonatype/nexus3:3.29.2
     ports:
       - 9081:8081
@@ -21,13 +21,13 @@ services:
     hostname: 127.0.0.1
     ports:
       - 9500:5000
-  jboss-service:
-    build: ./jboss-service
+  jboss:
+    build: ./jboss
     ports:
       - 9800:8080
       - 9900:9990
-  jboss-scripts:
-    build: ./jboss-scripts
+  service-scripts:
+    build: ./service-scripts
     tty: true
   jenkins:
     image: jenkins/jenkins:lts-slim
