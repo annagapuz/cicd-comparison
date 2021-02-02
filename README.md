@@ -69,8 +69,8 @@ Satellite intended to be a layer over RPMs in Nexus
 * https://www.jetbrains.com/help/teamcity/predefined-build-parameters.html#Detecting+Java+on+Agent
 ### GitLab
 * https://hub.docker.com/r/gitlab/gitlab-ce
-* gitlab/gitlab-ce:13.8.2-ce.0
-* https://docs.gitlab.com/omnibus/docker/
+* https://hub.docker.com/r/gitlab/gitlab-runner
+* https://docs.gitlab.com/runner/register/index.html#docker
 
 ## Tasks
 * RHEL Docker containers (w/ Compose)
