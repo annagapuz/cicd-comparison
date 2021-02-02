@@ -44,6 +44,3 @@
   - Authorize agent
   - Add maven-global-settings.xml to Root project
   - Add SonarQube Server profile to Root project
-- GitLab
-  - Register runner
-    - docker-compose run gitlab-runner register
