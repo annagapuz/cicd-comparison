@@ -1,0 +1,5 @@
+[WandiscoSVN]
+name=Wandisco SVN Repo
+baseurl=http://opensource.wandisco.com/rhel/$releasever/svn-1.10/RPMS/$basearch/
+enabled=1
+gpgcheck=0

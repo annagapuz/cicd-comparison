@@ -1,49 +1,84 @@
 version: "3.9"
 services:
+
+  devbox:
+    profiles:
+      - dev
+    build: ./devbox
+    tty: true
+    volumes:
+      - ~/dev/cicd-comparison:/opt/movie/local
+
   subversion:
+    profiles:
+      - dev
     build: ./subversion
     ports:
       - 9080:80
     volumes:
       - svn-vol:/var/www/svn
+
+  sap-ase:
+    profiles:
+      - dev
+    image: sap-express:latest
+    hostname: 127.0.0.1
+    ports:
+      - 9500:5000
+
+  jboss:
+    profiles:
+      - dev
+    build: ./jboss
+    ports:
+      - 9800:8080
+      - 9900:9990
+
   nexus:
+    profiles:
+      - dev
     image: sonatype/nexus3:3.29.2
     ports:
       - 9081:8081
+
+  service-scripts:
+    profiles:
+      - dev
+    build: ./service-scripts
+    tty: true
+
   sonarqube:
+    profiles:
+      - dev
     image: sonarqube:8.6.1-community
     ports:
       - 9000:9000
     environment:
       - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
-  sap-ase:
-    image: sap-express:latest
-    hostname: 127.0.0.1
-    ports:
-      - 9500:5000
-  jboss:
-    build: ./jboss
-    ports:
-      - 9800:8080
-      - 9900:9990
-  service-scripts:
-    build: ./service-scripts
-    tty: true
+
   jenkins:
+    profiles:
+      - pipeline_j
     image: jenkins/jenkins:lts-slim
     ports:
       - 9888:8080
       - 50000:50000
     volumes:
       - jenkins-vol:/var/jenkins_home
+
   teamcity:
+    profiles:
+      - pipeline_t
     image: jetbrains/teamcity-server:2020.2.2
     ports:
       - 8111:8111
     volumes:
       - teamcity-vol:/data/teamcity_server/datadir
       - teamcity-vol:/opt/teamcity/logs
+
   teamcity-agent:
+    profiles:
+      - pipeline_t
     build: ./teamcity-agent
     environment:
       - SERVER_URL=http://teamcity:8111
@@ -51,6 +86,7 @@ services:
       - teamcity-vol:/data/teamcity_agent/conf
     depends_on:
       - teamcity
+
 volumes:
   svn-vol:
   jenkins-vol:
