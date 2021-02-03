@@ -13,10 +13,10 @@
 ## CI / CD Tools
 ### Selected Tools
 * Jenkins
-* GitLab CICD
 * JetBrains TeamCity
 
 ### Removed from Comparison
+* GitLab CICD
 * CircleCI
 * GoCD
 * Azure DevOps Server
