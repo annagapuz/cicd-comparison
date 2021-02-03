@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+
+    tools {
+        maven "Maven 3.6.3"
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'bbaaa70f-b5fd-473f-b8dc-b0fd0b0412c2', depthOption: 'infinity', ignoreExternalsOption: true, local: 'MovieService', remote: 'http://subversion/svn/movie-service/trunk']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+
+                dir('./MovieService') {
+                    withMaven(globalMavenSettingsConfig: '617fa46e-afa8-4e72-9382-152514fa4ebc', jdk: 'OpenJDK 11', maven: 'Maven 3.6.3') {
+                        // Run Maven on a Unix agent.
+                         sh "mvn -Dmaven.test.failure.ignore=true clean package"
+                    }
+                }
+            }
+
+            post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
+                success {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                }
+            }
+        }
+    }
+}
