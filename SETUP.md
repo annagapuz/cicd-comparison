@@ -21,6 +21,7 @@
     - Add ENVIRONMENT=deploy to Jboss System Properties
   - Service - http://localhost:9800/movie-service
   - Web - http://localhost:9800/movie-web
+  - Get admin password hash from /opt/jboss/wildfly/standalone/configuration
 - Nexus
   - docker-compose exec nexus bash 
     - cat /nexus-data/admin.password
