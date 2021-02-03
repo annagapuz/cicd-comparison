@@ -40,7 +40,6 @@ Satellite intended to be a layer over RPMs in Nexus
 * Repositories:
   * movie-service
   * movie-web
-  * movie-scripts
   * pipeline
 ### Nexus
 * https://www.sonatype.com/nexus/free-developer-tools
@@ -64,6 +63,8 @@ Satellite intended to be a layer over RPMs in Nexus
 * Will exclude from demo
 ### Jenkins
 * https://hub.docker.com/r/jenkins/jenkins
+* http://vgaidarji.me/blog/2018/07/30/working-with-jenkinsfile-in-intellij-idea/
+* https://www.jenkins.io/doc/book/blueocean/getting-started/
 ### TeamCity
 * https://hub.docker.com/r/jetbrains/teamcity-server
 * https://www.jetbrains.com/help/teamcity/predefined-build-parameters.html#Detecting+Java+on+Agent
