@@ -26,9 +26,6 @@ RUN svnadmin create movie-service \
 RUN svnadmin create movie-web \
 && chown -R apache:apache movie-web
 
-RUN svnadmin create movie-scripts \
-&& chown -R apache:apache movie-scripts
-
 RUN svnadmin create pipeline \
 && chown -R apache:apache pipeline
 

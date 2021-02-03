@@ -6,4 +6,8 @@ cd /opt/movie || exit 1
 
 svn co --non-interactive --no-auth-cache --username admin --password password http://subversion/svn/movie-service/trunk MovieService
 
+svn co --non-interactive --no-auth-cache --username admin --password password http://subversion/svn/movie-web/trunk MovieWeb
+
+svn co --non-interactive --no-auth-cache --username admin --password password http://subversion/svn/pipeline/trunk Pipeline
+
 exit 0
