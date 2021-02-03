@@ -51,6 +51,7 @@ Satellite intended to be a layer over RPMs in Nexus
 * https://linuxconfig.org/how-to-create-an-rpm-package
 * https://rpm-packaging-guide.github.io/
 ### Active Directory
+* Will exclude from demo
 ### Sybase
 * Will use image previous built - https://github.com/annagapuz/docker-sap-ase-express
 ### MSSQL
@@ -69,6 +70,7 @@ Satellite intended to be a layer over RPMs in Nexus
 * https://hub.docker.com/r/jetbrains/teamcity-server
 * https://www.jetbrains.com/help/teamcity/predefined-build-parameters.html#Detecting+Java+on+Agent
 ### GitLab
+* Will exclude from demo
 * https://hub.docker.com/r/gitlab/gitlab-ce
 * https://hub.docker.com/r/gitlab/gitlab-runner
 * https://docs.gitlab.com/runner/register/index.html#docker
@@ -80,24 +82,13 @@ Satellite intended to be a layer over RPMs in Nexus
   * SonarQube
   * Nexus and OSS Scan
   * Sybase
-  * JBOSS x2
+  * JBOSS
   * Box for scripts? RESTful client? Reporting?
 * Create simple CRUD RESTful service
 * Create simple UI to call GET
-* Create RPM spec
-  * Create directories and copy (properties) files
-  * Set permissions
-  * Copy shell scripts
-    * Call RESTful API POST or PUT
-  * Cronjobs (?)
-  * Build in verification checks
 * Poll Subversion
 * Run maven build
   * Run static code analysis
     * PMD, FindBugs, SonarQube, EclEmma (JaCoCo)
-* Build RPM
 * Deploy all artifacts to Nexus
-* OSS index scan (?)
 * Deploy war file to JBOSS server
-  * Health checks (?)
-* Deploy RPM
