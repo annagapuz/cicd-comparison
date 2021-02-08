@@ -17,6 +17,7 @@
 
 ### Removed from Comparison
 * GitLab CICD
+* Atlassian Bamboo
 * CircleCI
 * GoCD
 * Azure DevOps Server
@@ -48,12 +49,13 @@ Satellite intended to be a layer over RPMs in Nexus
 * https://docs.jboss.org/wildfly/plugins/maven/latest/deploy-mojo.html
 * https://hub.docker.com/r/jboss/wildfly
 ### RPM
+* Will exclude from demo
 * https://linuxconfig.org/how-to-create-an-rpm-package
 * https://rpm-packaging-guide.github.io/
 ### Active Directory
 * Will exclude from demo
 ### Sybase
-* Will use image previous built - https://github.com/annagapuz/docker-sap-ase-express
+* Will use image previously built - https://github.com/annagapuz/docker-sap-ase-express
 ### MSSQL
 * Will exclude from demo
 ### Veracode
@@ -91,4 +93,4 @@ Satellite intended to be a layer over RPMs in Nexus
   * Run static code analysis
     * PMD, FindBugs, SonarQube, EclEmma (JaCoCo)
 * Deploy all artifacts to Nexus
-* Deploy war file to JBOSS server
+* Deploy war files to JBOSS server
