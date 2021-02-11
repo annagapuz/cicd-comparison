@@ -41,6 +41,7 @@
     - SonarQube
     - Pipeline Maven Integration
     - BlueOcean
+    - Copy Artifacts
   - Install JDK
     - https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz
   - Install Maven
