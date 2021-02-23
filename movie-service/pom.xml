@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.example</groupId>
     <artifactId>movie-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>movie-service</name>
     <description>RESTful Service for Movie Catalog</description>
@@ -134,5 +134,11 @@
             </build>
         </profile>
     </profiles>
+
+    <scm>
+        <connection>scm:svn:${SVN_URL}</connection>
+        <developerConnection>scm:svn:${SVN_URL}</developerConnection>
+        <url>${SVN_URL}</url>
+    </scm>
 
 </project>

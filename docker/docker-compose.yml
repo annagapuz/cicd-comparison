@@ -14,37 +14,52 @@ services:
     volumes:
       - svn-vol:/var/www/svn
 
+  nexus:
+    image: sonatype/nexus3:3.29.2
+    ports:
+      - 9081:8081
+    volumes:
+      - nexus-vol:/nexus-data
+
   sap-ase:
+    profiles:
+      - full
     image: sap-express:latest
     hostname: 127.0.0.1
     ports:
       - 9500:5000
 
   jboss:
+    profiles:
+      - full
     build: ./jboss
     ports:
       - 9800:8080
       - 9900:9990
 
-  nexus:
-    image: sonatype/nexus3:3.29.2
-    ports:
-      - 9081:8081
-
   service-scripts:
+    profiles:
+      - full
     build: ./service-scripts
     tty: true
 
   sonarqube:
+    profiles:
+      - full
     image: sonarqube:8.6.1-community
     ports:
       - 9000:9000
     environment:
       - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    volumes:
+      - sonarqube-vol:/opt/sonarqube/conf
+      - sonarqube-vol:/opt/sonarqube/data
+      - sonarqube-vol:/opt/sonarqube/logs
+      - sonarqube-vol:/opt/sonarqube/extensions
 
   jenkins:
     profiles:
-      - pipeline_j
+      - full
     image: jenkins/jenkins:lts-slim
     ports:
       - 9888:8080
@@ -52,28 +67,30 @@ services:
     volumes:
       - jenkins-vol:/var/jenkins_home
 
-  teamcity:
-    profiles:
-      - pipeline_t
-    image: jetbrains/teamcity-server:2020.2.2
-    ports:
-      - 8111:8111
-    volumes:
-      - teamcity-vol:/data/teamcity_server/datadir
-      - teamcity-vol:/opt/teamcity/logs
-    depends_on:
-      - teamcity-agent
-
-  teamcity-agent:
-    profiles:
-      - pipeline_t
-    build: ./teamcity-agent
-    environment:
-      - SERVER_URL=http://teamcity:8111
-    volumes:
-      - teamcity-vol:/data/teamcity_agent/conf
+#  teamcity:
+#    profiles:
+#      - pipeline_t
+#    image: jetbrains/teamcity-server:2020.2.2
+#    ports:
+#      - 8111:8111
+#    volumes:
+#      - teamcity-vol:/data/teamcity_server/datadir
+#      - teamcity-vol:/opt/teamcity/logs
+#    depends_on:
+#      - teamcity-agent
+#
+#  teamcity-agent:
+#    profiles:
+#      - pipeline_t
+#    build: ./teamcity-agent
+#    environment:
+#      - SERVER_URL=http://teamcity:8111
+#    volumes:
+#      - teamcity-vol:/data/teamcity_agent/conf
 
 volumes:
   svn-vol:
   jenkins-vol:
-  teamcity-vol:
+  nexus-vol:
+  sonarqube-vol:
+#  teamcity-vol:
