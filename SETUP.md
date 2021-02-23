@@ -1,7 +1,7 @@
 # Set up Demo
 
 - Start all docker-compose services
-  - docker-compose up -d --profile
+  - docker-compose --profile full up -d
 - Check in all service code to SVN
   - <do on Mac so it's on Docker volume>
   - http://localhost:9080/svn/movie-service
