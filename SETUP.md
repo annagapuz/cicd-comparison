@@ -13,39 +13,41 @@
   - http://localhost:9080/svn/movie-scripts
     - svn import -m "Initial checkin" http://localhost:9080/svn/movie-scripts/trunk
     - svn co http://localhost:9080/svn/movie-service/trunk SvnMovieScripts
-  - http://localhost:9080/svn/pipeline
-    - svn import -m "Initial checkin" http://localhost:9080/svn/pipeline/trunk
-    - svn co http://localhost:9080/svn/pipeline/trunk SvnPipeline
 - JBoss setup
+  - Start as admin:password
   - Admin console - http://localhost:9900
     - Add ENVIRONMENT=deploy to Jboss System Properties
   - Service - http://localhost:9800/movie-service
   - Web - http://localhost:9800/movie-web
   - Get admin password hash from /opt/jboss/wildfly/standalone/configuration
 - Nexus
-  - docker-compose exec nexus bash 
-    - cat /nexus-data/admin.password
+  - docker-compose exec nexus cat /nexus-data/admin.password
   - http://localhost:9081  
   - Add Releases and Snapshots repositories
     - demo-release
     - demo-snapshot
-  - Add Sybase driver to Nexus
-    - mvn deploy:deploy-file -DrepositoryId=demoRepo -Durl=http://localhost:9081/repository/demo-release/ -Dfile=/home/amgaps/dev/software/sap-ase/jconn4.jar -DgroupId=com.sybase.jdbc4 -DartifactId=jconn -Dversion=4 -Dpackaging=jar
 - SonarQube
+  - http://localhost:9000
   - Start as admin:admin
   - mvn sonar:sonar -Dsonar.projectKey=movie-service -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=07b739a25d86dc8f9c07ecc68b9a28aa495933e4 -Dsonar.scm.disabled=true
 - Jenkins
   - http://localhost:9888
+  - Initial admin password
+    - docker-compose exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+  - Let recommended plugins be installed
   - Install Plugins
+    - Subversion
     - JaCoCo
     - SonarQube
     - Pipeline Maven Integration
     - BlueOcean
-    - Copy Artifacts
   - Install JDK
+    - Install as OpenJDK 11
     - https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz
+    - Subdirectory - jdk-11
   - Install Maven
-    - Add maven-global-settings.xml (from devbox image)
+    - Install as Maven 3.6.3
+    - Add maven-global-settings.xml (from devbox image) under "Managed files" as ID 617fa46e-afa8-4e72-9382-152514fa4ebc
 - TeamCity
   - Add JDK 11 (done via Dockerfile)
   - http://localhost:8111

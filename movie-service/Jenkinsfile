@@ -1,3 +1,5 @@
+def TAG_IT = 'No'
+
 pipeline {
     agent any
 
@@ -45,7 +47,13 @@ pipeline {
 //            }
 //        }
 
-        stage('Upload Snapshot Nexus') {
+        stage('Upload Snapshot') {
+            when {
+                not {
+                    branch 'tags/*'
+                }
+                beforeAgent true
+            }
             steps {
                 withMaven(globalMavenSettingsConfig: '617fa46e-afa8-4e72-9382-152514fa4ebc', jdk: 'OpenJDK 11', maven: 'Maven 3.6.3') {
                     script {
@@ -85,20 +93,26 @@ pipeline {
 
         stage('Run Maven Release') {
             when {
-                expression { params.TAG_IT == 'Yes' }
+                expression { TAG_IT == 'Yes' }
+                not {
+                    branch 'tags/*'
+                }
                 beforeAgent true
             }
             steps {
                 withMaven(globalMavenSettingsConfig: '617fa46e-afa8-4e72-9382-152514fa4ebc', jdk: 'OpenJDK 11', maven: 'Maven 3.6.3') {
                     script {
-                        POM_CURRENT_VERSION = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout | tail -1', returnStdout: true
+                        POM_CURRENT_VERSION = sh(script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout | tail -1', returnStdout: true).trim()
                     }
                     echo "Current version in POM is ${POM_CURRENT_VERSION}"
                     script {
-                        POM_NEXT_VERSION = POM_CURRENT_VERSION.replace('-SNAPSHOT': '')
+                        POM_RELEASE_VERSION = POM_CURRENT_VERSION.replaceAll('-SNAPSHOT', '')
                     }
-                    echo "Next version in POM will be ${POM_NEXT_VERSION}"
-                    // sh "mvn release:prepare -B -Dtag=tags/release-${POM_NEXT_VERSION} -DdevelopmentVersion=${POM_NEXT_VERSION}"
+                    echo "Release version from POM will be ${POM_RELEASE_VERSION}"
+
+                    sh 'mvn release:prepare -B'
+                    sh 'cat ./release.properties'
+                    sh 'mvn release:perform -B -Dgoals=deploy -Darguments="-Dmaven.test.skip=true -DaltDeploymentRepository=demoRepo::default::http://nexus:8081/repository/demo-release"'
                 }
             }
         }
@@ -111,7 +125,7 @@ pipeline {
             agent none
             steps {
                 // BRANCH_NAME branches/add_feature
-                echo "Is Branch ${env.BRANCH_NAME}"
+                echo "Is Branch == ${env.BRANCH_NAME}"
 
             }
         }
@@ -124,7 +138,7 @@ pipeline {
             agent none
             steps {
                 // BRANCH_NAME branches/add_feature
-                echo "Is Tag ${env.BRANCH_NAME}"
+                echo "Is Tag == ${env.BRANCH_NAME}"
             }
         }
 

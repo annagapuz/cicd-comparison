@@ -5,6 +5,8 @@ COPY wandisco-svn.repo /etc/yum.repos.d
 
 COPY maven-global-settings.xml /etc/maven/settings.xml
 
+COPY jconn4.jar /tmp/jconn4.jar
+
 RUN yum --disableplugin=subscription-manager repolist \
 && yum -y --disableplugin=subscription-manager update \
 && yum -y --disableplugin=subscription-manager install subversion \
