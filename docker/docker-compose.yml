@@ -3,6 +3,7 @@ services:
 
   devbox:
     build: ./devbox
+    tty: true
     volumes:
       - ~/dev/cicd-comparison:/opt/movie/local
 

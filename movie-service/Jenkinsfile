@@ -21,10 +21,16 @@ pipeline {
         }
 
         stage('Build and Unit Test') {
+            when {
+              not {
+                changelog '.*^maven-release-plugin.+$'
+              }
+              beforeAgent true
+            }
             steps {
                 echo 'No checkout required as it happens automatically with multibranch pipeline'
                 withMaven(globalMavenSettingsConfig: '617fa46e-afa8-4e72-9382-152514fa4ebc', jdk: 'OpenJDK 11', maven: 'Maven 3.6.3') {
-                    echo 'Run Maven CLEAN and VERIFY with Force Updates'
+                    echo 'Run Maven CLEAN and VERIFY with Force Dependency Updates'
                     sh 'mvn -U clean verify'
                 }
             }
@@ -38,95 +44,121 @@ pipeline {
             }
         }
 
-//        stage('Static Analysis') {
-//            steps {
-//                withMaven(globalMavenSettingsConfig: '617fa46e-afa8-4e72-9382-152514fa4ebc', jdk: 'OpenJDK 11', maven: 'Maven 3.6.3') {
-//                    echo 'Run Sonarqube analysis'
-//                    sh 'mvn sonar:sonar -Dsonar.projectKey=movie-service -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=07b739a25d86dc8f9c07ecc68b9a28aa495933e4 -Dsonar.scm.disabled=true'
-//                }
-//            }
-//        }
-
-        stage('Upload Snapshot') {
+        stage('Determine if Trunk') {
             when {
-                not {
-                    branch 'tags/*'
-                }
+                branch 'trunk'
                 beforeAgent true
-            }
-            steps {
-                withMaven(globalMavenSettingsConfig: '617fa46e-afa8-4e72-9382-152514fa4ebc', jdk: 'OpenJDK 11', maven: 'Maven 3.6.3') {
-                    script {
-                        POM_SNAPSHOT_VERSION = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout | tail -1', returnStdout: true
-                    }
-                    echo "Building Snapshot of version ${POM_SNAPSHOT_VERSION}"
-                    sh 'mvn -Dmaven.test.skip=true -DaltDeploymentRepository=demoRepo::default::http://nexus:8081/repository/demo-snapshot deploy'
-                }
-            }
-        }
-
-        stage('Tag as a release?') {
-            options {
-                timeout(time: 15, unit: 'MINUTES')
-            }
-            when {
-                not {
-                    branch 'tags/*'
-                }
-                beforeAgent true
-            }
-            input {
-                message 'Tag as a release?'
-                ok 'Submit'
-                parameters {
-                    choice choices: ['Yes', 'No'], description: '', name: 'USER_ANSWER'
-                }
             }
             agent none
             steps {
-                echo "Your decision to tag as a release is: ${USER_ANSWER}"
-                script {
-                    TAG_IT = sh(script: "echo ${USER_ANSWER}", returnStdout: true).trim()
-                }
-            }
-        }
+                echo "Is Trunk == ${env.BRANCH_NAME}"
 
-        stage('Run Maven Release') {
-            when {
-                expression { TAG_IT == 'Yes' }
-                not {
-                    branch 'tags/*'
-                }
-                beforeAgent true
-            }
-            steps {
-                withMaven(globalMavenSettingsConfig: '617fa46e-afa8-4e72-9382-152514fa4ebc', jdk: 'OpenJDK 11', maven: 'Maven 3.6.3') {
-                    script {
-                        POM_CURRENT_VERSION = sh(script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout | tail -1', returnStdout: true).trim()
-                    }
-                    echo "Current version in POM is ${POM_CURRENT_VERSION}"
-                    script {
-                        POM_RELEASE_VERSION = POM_CURRENT_VERSION.replaceAll('-SNAPSHOT', '')
-                    }
-                    echo "Release version from POM will be ${POM_RELEASE_VERSION}"
-
-                    sh 'mvn release:prepare -B'
-                    sh 'cat ./release.properties'
-                    sh 'mvn release:perform -B -Dgoals=deploy -Darguments="-Dmaven.test.skip=true -DaltDeploymentRepository=demoRepo::default::http://nexus:8081/repository/demo-release"'
-                }
             }
         }
 
         stage('Determine if Branch') {
             when {
                 branch 'branches/*'
+                not {
+                  changelog '^.*maven-release-plugin.*$'
+                }
                 beforeAgent true
             }
-            agent none
-            steps {
-                // BRANCH_NAME branches/add_feature
-                echo "Is Branch == ${env.BRANCH_NAME}"
+            stages {
+            //        stage('Static Analysis') {
+            //            steps {
+            //                withMaven(globalMavenSettingsConfig: '617fa46e-afa8-4e72-9382-152514fa4ebc', jdk: 'OpenJDK 11', maven: 'Maven 3.6.3') {
+            //                    echo 'Run Sonarqube analysis'
+            //                    sh 'mvn sonar:sonar -Dsonar.projectKey=movie-service -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=07b739a25d86dc8f9c07ecc68b9a28aa495933e4 -Dsonar.scm.disabled=true'
+            //                }
+            //            }
+            //        }
 
+            stage('Confirm as Branch') {
+              agent none
+              steps {
+                  echo "Is Branch == ${env.BRANCH_NAME}"
+
+              }
+            }
+
+                    stage('Upload Snapshot') {
+                        when {
+                                branch 'branches/*'
+                                not {
+                                  changelog '^.*maven-release-plugin.*$'
+                                }
+                            beforeAgent true
+                        }
+                        steps {
+                            withMaven(globalMavenSettingsConfig: '617fa46e-afa8-4e72-9382-152514fa4ebc', jdk: 'OpenJDK 11', maven: 'Maven 3.6.3') {
+                                script {
+                                    POM_SNAPSHOT_VERSION = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout | tail -1', returnStdout: true
+                                }
+                                echo "Building Snapshot of version ${POM_SNAPSHOT_VERSION}"
+                                sh 'mvn -Dmaven.test.skip=true -DaltDeploymentRepository=demoRepo::default::http://nexus:8081/repository/demo-snapshot deploy'
+                            }
+                        }
+                    }
+
+                    stage('Tag as a release?') {
+                        options {
+                            timeout(time: 15, unit: 'MINUTES')
+                        }
+                        when {
+                            branch 'branches/*'
+                            not {
+                              changelog '.*^maven-release-plugin.+$'
+                            }
+                            beforeInput true
+                            beforeAgent true
+                        }
+                        input {
+                            message 'Tag as a release?'
+                            ok 'Submit'
+                            parameters {
+                                choice choices: ['Yes', 'No'], description: '', name: 'USER_ANSWER'
+                            }
+                        }
+                        agent none
+                        steps {
+                            echo "Your decision to tag as a release is: ${USER_ANSWER}"
+                            script {
+                                TAG_IT = sh(script: "echo ${USER_ANSWER}", returnStdout: true).trim()
+                            }
+                        }
+                    }
+
+                    stage('Run Maven Release') {
+                        when {
+                            expression { TAG_IT == 'Yes' }
+                            branch 'branches/*'
+                            not {
+                              changelog '.*^maven-release-plugin.+$'
+                            }
+                            beforeAgent true
+                        }
+                        environment {
+                            ADMIN_CREDS = credentials('ADMIN_UID')
+                        }
+                        steps {
+                            withMaven(globalMavenSettingsConfig: '617fa46e-afa8-4e72-9382-152514fa4ebc', jdk: 'OpenJDK 11', maven: 'Maven 3.6.3') {
+                                script {
+                                    POM_CURRENT_VERSION = sh(script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout | tail -1', returnStdout: true).trim()
+                                }
+                                echo "Current version in POM is ${POM_CURRENT_VERSION}"
+                                script {
+                                    POM_RELEASE_VERSION = POM_CURRENT_VERSION.replaceAll('-SNAPSHOT', '')
+                                }
+                                echo "Release version from POM will be ${POM_RELEASE_VERSION}"
+
+                                sh 'mvn release:clean'
+                                sh "mvn release:prepare -Dusername=${ADMIN_CREDS_USR} -Dpassword=${ADMIN_CREDS_PSW} -DcheckModificationExcludeList=target -Darguments=\"-Dmaven.test.skip=true\" -B"
+                                sh 'cat ./release.properties'
+                                sh 'mvn release:perform -B -Dgoals=deploy -Darguments="-Dmaven.test.skip=true -DaltDeploymentRepository=demoRepo::default::http://nexus:8081/repository/demo-release"'
+                            }
+                        }
+                    }
             }
         }
 
@@ -137,7 +169,6 @@ pipeline {
             }
             agent none
             steps {
-                // BRANCH_NAME branches/add_feature
                 echo "Is Tag == ${env.BRANCH_NAME}"
             }
         }
