@@ -2,17 +2,9 @@
 
 - Start all docker-compose services
   - docker-compose --profile full up -d
-- Check in all service code to SVN
+- Code gets checked in to SVN mono repo
   - docker-compose exec devbox bash
-  - http://localhost:9080/svn/movie-service
-    - svn import -m "Initial checkin" http://subversion/svn/movie-service/trunk
-    - svn co http://subversionsvn/movie-service/trunk SvnMovieService
-  - http://localhost:9080/svn/movie-web
-    - svn import -m "Initial checkin" http://subversion/svn/movie-web/trunk
-    - svn co http://subversion/svn/movie-web/trunk SvnMovieWeb
-  - http://localhost:9080/svn/movie-scripts
-    - svn import -m "Initial checkin" http://subversion/svn/movie-scripts/trunk
-    - svn co http://subversion/svn/movie-service/trunk SvnMovieScripts
+  - http://localhost:9080/svn/platform
 - JBoss setup
   - Start as admin:password
   - Admin console - http://localhost:9900
