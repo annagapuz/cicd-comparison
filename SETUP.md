@@ -3,23 +3,23 @@
 - Start all docker-compose services
   - docker-compose --profile full up -d
 - Check in all service code to SVN
-  - <do on Mac so it's on Docker volume>
+  - docker-compose exec devbox bash
   - http://localhost:9080/svn/movie-service
-    - svn import -m "Initial checkin" http://localhost:9080/svn/movie-service/trunk
-    - svn co http://localhost:9080/svn/movie-service/trunk SvnMovieService
+    - svn import -m "Initial checkin" http://subversion/svn/movie-service/trunk
+    - svn co http://subversionsvn/movie-service/trunk SvnMovieService
   - http://localhost:9080/svn/movie-web
-    - svn import -m "Initial checkin" http://localhost:9080/svn/movie-web/trunk
-    - svn co http://localhost:9080/svn/movie-web/trunk SvnMovieWeb
+    - svn import -m "Initial checkin" http://subversion/svn/movie-web/trunk
+    - svn co http://subversion/svn/movie-web/trunk SvnMovieWeb
   - http://localhost:9080/svn/movie-scripts
-    - svn import -m "Initial checkin" http://localhost:9080/svn/movie-scripts/trunk
-    - svn co http://localhost:9080/svn/movie-service/trunk SvnMovieScripts
+    - svn import -m "Initial checkin" http://subversion/svn/movie-scripts/trunk
+    - svn co http://subversion/svn/movie-service/trunk SvnMovieScripts
 - JBoss setup
   - Start as admin:password
   - Admin console - http://localhost:9900
     - Add ENVIRONMENT=deploy to Jboss System Properties
   - Service - http://localhost:9800/movie-service
   - Web - http://localhost:9800/movie-web
-  - Get admin password hash from /opt/jboss/wildfly/standalone/configuration
+  - Get admin password hash from /opt/jboss/wildfly/standalone/configuration, if needed
 - Nexus
   - docker-compose exec nexus cat /nexus-data/admin.password
   - http://localhost:9081  
@@ -28,7 +28,7 @@
     - demo-snapshot
 - SonarQube
   - http://localhost:9000
-  - Start as admin:admin
+  - Start as admin:password
   - mvn sonar:sonar -Dsonar.projectKey=movie-service -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=07b739a25d86dc8f9c07ecc68b9a28aa495933e4 -Dsonar.scm.disabled=true
 - Jenkins
   - http://localhost:9888
