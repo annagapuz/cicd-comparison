@@ -1,18 +1,20 @@
 version: "3.9"
 services:
 
-  devbox:
-    build: ./devbox
-    tty: true
-    volumes:
-      - ~/dev/cicd-comparison:/opt/movie/local
-
   subversion:
     build: ./subversion
     ports:
       - 9080:80
     volumes:
       - svn-vol:/var/www/svn
+
+  devbox:
+    build: ./devbox
+    tty: true
+    volumes:
+      - ~/dev/cicd-comparison:/opt/movie/local
+    depends_on:
+      - subversion
 
   nexus:
     image: sonatype/nexus3:3.29.2

@@ -46,18 +46,22 @@ pipeline {
 
     stage('Determine if Trunk') {
       when {
-        branch 'trunk'
+        branch 'trunk/**'
         beforeAgent true
       }
       agent none
-      steps {
-        echo "Is Trunk == ${env.BRANCH_NAME}"
-      }
+      stages {
+          stage('Merged to Trunk') {
+            steps {
+                echo "TRUNK = ${env.BRANCH_NAME}"
+            }
+          }
+        }
     }
 
     stage('Determine if Branch') {
       when {
-        branch 'branches/*'
+        branch 'branches/**'
         not {
           changelog '^.*maven-release-plugin.*$'
         }
@@ -66,22 +70,15 @@ pipeline {
       stages {
         stage('Static Analysis') {
           steps {
-            // withMaven(globalMavenSettingsConfig: '617fa46e-afa8-4e72-9382-152514fa4ebc', jdk: 'OpenJDK 11', maven: 'Maven 3.6.3') {
-            //     echo 'Run Sonarqube analysis'
-            //     sh 'mvn sonar:sonar -Dsonar.projectKey=movie-service -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=07b739a25d86dc8f9c07ecc68b9a28aa495933e4 -Dsonar.scm.disabled=true'
-            // }
-            echo 'Run SonarQube Analysis (not implemented)'
+          echo 'Run SonarQube Analysis'
+            withMaven(globalMavenSettingsConfig: '617fa46e-afa8-4e72-9382-152514fa4ebc', jdk: 'OpenJDK 11', maven: 'Maven 3.6.3') {
+                 echo 'Run Sonarqube analysis'
+                 sh 'mvn sonar:sonar -Dsonar.projectKey=movie-service -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=854852eca52e0b482a15aa5ee7db17d30f14d659 -Dsonar.scm.disabled=true'
+             }
           }
         }
 
         stage('Upload Snapshot') {
-          when {
-            branch 'branches/*'
-            not {
-              changelog '^.*maven-release-plugin.*$'
-            }
-            beforeAgent true
-          }
           steps {
             withMaven(globalMavenSettingsConfig: '617fa46e-afa8-4e72-9382-152514fa4ebc', jdk: 'OpenJDK 11', maven: 'Maven 3.6.3') {
               script {
@@ -95,15 +92,7 @@ pipeline {
 
         stage('Tag as a release?') {
           options {
-            timeout(time: 15, unit: 'MINUTES')
-          }
-          when {
-            branch 'branches/*'
-            not {
-              changelog '.*^maven-release-plugin.+$'
-            }
-            beforeInput true
-            beforeAgent true
+            timeout(time: 10, unit: 'MINUTES')
           }
           input {
             message 'Tag as a release?'
@@ -124,10 +113,6 @@ pipeline {
         stage('Run Maven Release') {
           when {
             expression { TAG_IT == 'Yes' }
-            branch 'branches/*'
-            not {
-              changelog '.*^maven-release-plugin.+$'
-            }
             beforeAgent true
           }
           environment {
@@ -144,7 +129,7 @@ pipeline {
               }
               echo "Release version from POM will be ${POM_RELEASE_VERSION}"
 
-              sh "mvn release:prepare -Dusername=${ADMIN_CREDS_USR} -Dpassword=${ADMIN_CREDS_PSW} -DcheckModificationExcludeList=target -Darguments=\"-Dmaven.test.skip=true\" -B"
+              sh "mvn release:prepare -Dusername=${ADMIN_CREDS_USR} -Dpassword=${ADMIN_CREDS_PSW} -DcheckModificationExcludeList=target -DtagNameFormat=\"movie-service/@{project.artifactId}-@{project.version}\" -Darguments=\"-Dmaven.test.skip=true\" -B"
               sh 'cat ./release.properties'
               sh 'mvn release:perform -B -Dgoals=deploy -Darguments="-Dmaven.test.skip=true -DaltDeploymentRepository=demoRepo::default::http://nexus:8081/repository/demo-release"'
               sh 'mvn release:clean'
@@ -156,20 +141,30 @@ pipeline {
 
     stage('Determine if Tag') {
       when {
-        branch 'tags/*'
+        branch 'tags/**'
         beforeAgent true
       }
       stages {
-        stage('Call Other Pipelines?') {
-          agent none
-          steps {
-            echo 'Call other pipelines before Jboss deploy?'
-          }
-        }
         stage('Get WAR from Nexus') {
-          agent none
           steps {
-            echo 'Get WAR from Nexus (not implemented)'
+            withMaven(globalMavenSettingsConfig: '617fa46e-afa8-4e72-9382-152514fa4ebc', jdk: 'OpenJDK 11', maven: 'Maven 3.6.3') {
+              script {
+                POM_GROUP_ID = sh(script: 'mvn help:evaluate -Dexpression=project.groupId -q -DforceStdout | tail -1', returnStdout: true).trim()
+                POM_ARTIFACT_ID = sh(script: 'mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout | tail -1', returnStdout: true).trim()
+                POM_VERSION = sh(script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout | tail -1', returnStdout: true).trim()
+
+                POM_GROUP_ID_PATH = POM_GROUP_ID.replaceAll('\\.', '/')
+
+                echo "Group ID in POM is ${POM_GROUP_ID}"
+                echo "Artifact ID in POM is ${POM_ARTIFACT_ID}"
+                echo "Version in POM is ${POM_VERSION}"
+
+                sh 'mvn wildfly:undeploy'
+                sh "mvn wildfly:deploy-only -Dwildfly.deployment.contentUrl=http://nexus:8081/repository/demo-release/${POM_GROUP_ID_PATH}/${POM_ARTIFACT_ID}/${POM_VERSION}/${POM_ARTIFACT_ID}-${POM_VERSION}.war"
+
+              }
+
+            }
           }
         }
         stage('Deploy WAR to JBOSS DEVL') {
@@ -198,12 +193,5 @@ pipeline {
         }
       }
     }
-
-    stage('Clean Workspace') {
-      steps {
-        cleanWs()
-      }
-    }
-
   }
 }

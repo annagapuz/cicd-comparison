@@ -20,14 +20,9 @@ RUN touch /etc/svn-users \
 && chown root:apache /etc/svn-users \
 && chmod 640 /etc/svn-users
 
-RUN svnadmin create movie-service \
-&& chown -R apache:apache movie-service
-
-RUN svnadmin create movie-web \
-&& chown -R apache:apache movie-web
-
-RUN svnadmin create pipeline \
-&& chown -R apache:apache pipeline
+# Use a mono repo
+RUN svnadmin create platform \
+&& chown -R apache:apache platform
 
 EXPOSE 80
 
