@@ -3,11 +3,6 @@ def TAG_IT = 'No'
 pipeline {
   agent any
 
-  //    tools {
-  //        jdk 'OpenJDK 11'
-  //        maven 'Maven 3.6.3'
-  //    }
-
   stages {
     stage('Initialization') {
       agent none
@@ -145,7 +140,7 @@ pipeline {
         beforeAgent true
       }
       stages {
-        stage('Get WAR from Nexus') {
+        stage('Deploy WAR to JBOSS DEVL') {
           steps {
             withMaven(globalMavenSettingsConfig: '617fa46e-afa8-4e72-9382-152514fa4ebc', jdk: 'OpenJDK 11', maven: 'Maven 3.6.3') {
               script {
@@ -165,12 +160,6 @@ pipeline {
               }
 
             }
-          }
-        }
-        stage('Deploy WAR to JBOSS DEVL') {
-          agent none
-          steps {
-            echo 'Deploy WAR to JBOSS DEVL (not implemented)'
           }
         }
         stage('Execute RFT against DEVL') {
