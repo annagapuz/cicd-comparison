@@ -40,10 +40,5 @@
   - Install Maven
     - Install as Maven 3.6.3
     - Add maven-global-settings.xml (from devbox image) under "Managed files" as ID 617fa46e-afa8-4e72-9382-152514fa4ebc
+   - Add SonarQube server to Global Tool Configuration
   - Create Global Credentials as ADMIN_UID
-- TeamCity
-  - Add JDK 11 (done via Dockerfile)
-  - http://localhost:8111
-  - Authorize agent
-  - Add maven-global-settings.xml to Root project (from devbox image)
-  - Add SonarQube Server profile to Root project
