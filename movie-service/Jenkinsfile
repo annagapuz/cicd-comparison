@@ -105,6 +105,24 @@ pipeline {
           }
         }
 
+        stage('Upload for Analysis') {
+          agent none
+          parallel {
+                stage('Veracode Analysis') {
+                    agent none
+                    steps {
+                        echo "Veracode"
+                    }
+                }
+                stage('CAST AIP Analysis') {
+                    agent none
+                    steps {
+                        echo "CAST AIP"
+                    }
+                }
+              }
+        }
+
         stage('Run Maven Release') {
           when {
             expression { TAG_IT == 'Yes' }
