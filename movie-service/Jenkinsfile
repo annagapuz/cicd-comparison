@@ -106,7 +106,6 @@ pipeline {
         }
 
         stage('Upload for Analysis') {
-          agent none
           parallel {
                 stage('Veracode Analysis') {
                     agent none
