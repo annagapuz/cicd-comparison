@@ -141,7 +141,7 @@ pipeline {
               }
               echo "Release version from POM will be ${POM_RELEASE_VERSION}"
 
-              sh "mvn release:prepare -Dusername=${ADMIN_CREDS_USR} -Dpassword=${ADMIN_CREDS_PSW} -DcheckModificationExcludeList=target -DtagNameFormat=\"movie-service/@{project.artifactId}-@{project.version}\" -Darguments=\"-Dmaven.test.skip=true\" -B"
+              sh "mvn release:prepare -Dusername=${ADMIN_CREDS_USR} -Dpassword=${ADMIN_CREDS_PSW} -DcheckModificationExcludeList=target/** -DtagNameFormat=\"movie-service/@{project.artifactId}-@{project.version}\" -Darguments=\"-Dmaven.test.skip=true\" -B"
               sh 'cat ./release.properties'
               sh 'mvn release:perform -B -Dgoals=deploy -Darguments="-Dmaven.test.skip=true -DaltDeploymentRepository=demoRepo::default::http://nexus:8081/repository/demo-release"'
               sh 'mvn release:clean'
