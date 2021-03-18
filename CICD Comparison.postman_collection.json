@@ -1,0 +1,81 @@
+{
+	"info": {
+		"_postman_id": "336f7413-fba4-4eea-93ef-95f45a6ca7b4",
+		"name": "CICD Comparison",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Movies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{service-url}}/movies",
+					"host": [
+						"{{service-url}}"
+					],
+					"path": [
+						"movies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add New Movie by Title",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"title\" : \"coco\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{service-url}}/movies",
+					"host": [
+						"{{service-url}}"
+					],
+					"path": [
+						"movies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Increment Stream Count by Movie ID",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{service-url}}/movies/1/streamCount/10",
+					"host": [
+						"{{service-url}}"
+					],
+					"path": [
+						"movies",
+						"1",
+						"streamCount",
+						"10"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
