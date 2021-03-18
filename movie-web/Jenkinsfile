@@ -3,11 +3,6 @@ def TAG_IT = 'No'
 pipeline {
   agent any
 
-  //    tools {
-  //        jdk 'OpenJDK 11'
-  //        maven 'Maven 3.6.3'
-  //    }
-
   stages {
     stage('Initialization') {
       agent none
@@ -73,7 +68,7 @@ pipeline {
           echo 'Run SonarQube Analysis'
             withMaven(globalMavenSettingsConfig: '617fa46e-afa8-4e72-9382-152514fa4ebc', jdk: 'OpenJDK 11', maven: 'Maven 3.6.3') {
                  echo 'Run Sonarqube analysis'
-                 sh 'mvn sonar:sonar -Dsonar.projectKey=movie-service -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=dbe7dc8bc19545e048da80e9e231ec1730fb2711 -Dsonar.scm.disabled=true'
+                 sh 'mvn sonar:sonar -Dsonar.projectKey=movie-web -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=dbe7dc8bc19545e048da80e9e231ec1730fb2711 -Dsonar.scm.disabled=true'
              }
           }
         }
