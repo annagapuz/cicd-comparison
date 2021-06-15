@@ -1,10 +1,17 @@
 version: "3.9"
 services:
 
+  directoryserver:
+    build: ./directoryserver
+    ports:
+      - 10389:10389
+
   subversion:
     build: ./subversion
     ports:
       - 9080:80
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - svn-vol:/var/www/svn
 
@@ -20,6 +27,8 @@ services:
     image: sonatype/nexus3:3.29.2
     ports:
       - 9081:8081
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - nexus-vol:/nexus-data
 
@@ -38,6 +47,8 @@ services:
     ports:
       - 9800:8080
       - 9900:9990
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   service-scripts:
     profiles:
@@ -51,8 +62,31 @@ services:
     image: sonarqube:8.6.1-community
     ports:
       - 9000:9000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+      # Enable the LDAP feature
+      - SONAR_SECURITY_REALM=LDAP
+      - LDAP_URL=ldap://host.docker.internal:10389
+      # Bind DN is the username of an LDAP user to connect (or bind) with. Leave this blank for anonymous access to the LDAP directory (optional)
+      - LDAP_BINDDN=uid=admin,ou=everyone,dc=example,dc=com
+      - LDAP_BINDPASSWORD=password
+      # Possible values: simple | CRAM-MD5 | DIGEST-MD5 | GSSAPI See http://java.sun.com/products/jndi/tutorial/ldap/security/auth.html (default: simple)
+      - LDAP_AUTHENTICATION=simple
+      - LDAP_REALM=example.com
+      # Distinguished Name (DN) of the root node in LDAP from which to search for users (mandatory)
+      - LDAP_USER_BASEDN=ou=everyone,dc=example,dc=com
+      # LDAP user request. (default: (&(objectClass=inetOrgPerson)(uid={login})) )
+      - LDAP_USER_REQUEST=(&(objectClass=inetOrgPerson)(uid={login}))
+      # Attribute in LDAP defining the user’s real name. (default: cn)
+      - LDAP_USER_REALNAMEATTRIBUTE=displayName
+      # Distinguished Name (DN) of the root node in LDAP from which to search for groups. (optional, default: empty)
+      - LDAP_GROUP_BASEDN=ou=groups,dc=example,dc=com
+      # LDAP group request (default: (&(objectClass=groupOfUniqueNames)(uniqueMember={dn})) )
+      - LDAP_GROUP_REQUEST=(&(objectClass=groupOfNames)(member={dn}))
+      # Property used to specifiy the attribute to be used for returning the list of user groups in the compatibility mode. (default: cn)
+      - LDAP_GROUP_IDATTRIBUTE=cn
     volumes:
       - sonarqube-vol:/opt/sonarqube/conf
       - sonarqube-vol:/opt/sonarqube/data
@@ -66,6 +100,8 @@ services:
     ports:
       - 9888:8080
       - 50000:50000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - jenkins-vol:/var/jenkins_home
 
