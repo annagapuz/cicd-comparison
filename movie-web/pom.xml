@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.example</groupId>
     <artifactId>movie-web</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>movie-web</name>
     <description>Simple GUI for Movie Catalog</description>
@@ -78,6 +78,17 @@
                 <version>0.8.6</version>
             </plugin>
             <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-release-plugin</artifactId>
+              <dependencies>
+                  <dependency>
+                    <groupId>com.google.code.maven-scm-provider-svnjava</groupId>
+                    <artifactId>maven-scm-provider-svnjava</artifactId>
+                    <version>2.1.2</version>
+                  </dependency>
+              </dependencies>
+          </plugin>
+            <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>2.1.0.Beta1</version>
@@ -86,6 +97,7 @@
                     <port>9990</port>
                     <username>admin</username>
                     <password>password</password>
+                    <matchPattern>movie-web.*</matchPattern>
                     <runtimeName>movie-web.war</runtimeName>
                 </configuration>
             </plugin>
@@ -122,5 +134,11 @@
             </build>
         </profile>
     </profiles>
+
+    <scm>
+        <connection>scm:svn:${SVN_URL}</connection>
+        <developerConnection>scm:svn:${SVN_URL}</developerConnection>
+        <url>${SVN_URL}</url>
+    </scm>
 
 </project>

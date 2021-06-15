@@ -21,7 +21,7 @@
 - SonarQube
   - http://localhost:9000
   - Start as admin:password
-  - mvn sonar:sonar -Dsonar.projectKey=movie-service -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=07b739a25d86dc8f9c07ecc68b9a28aa495933e4 -Dsonar.scm.disabled=true
+  - mvn sonar:sonar -Dsonar.projectKey=movie-service -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=dbe7dc8bc19545e048da80e9e231ec1730fb2711 -Dsonar.scm.disabled=true
 - Jenkins
   - http://localhost:9888
   - Initial admin password
@@ -40,5 +40,10 @@
   - Install Maven
     - Install as Maven 3.6.3
     - Add maven-global-settings.xml (from devbox image) under "Managed files" as ID 617fa46e-afa8-4e72-9382-152514fa4ebc
-   - Add SonarQube server to Global Tool Configuration
   - Create Global Credentials as ADMIN_UID
+- TeamCity
+  - Add JDK 11 (done via Dockerfile)
+  - http://localhost:8111
+  - Authorize agent
+  - Add maven-global-settings.xml to Root project (from devbox image)
+  - Add SonarQube Server profile to Root project
